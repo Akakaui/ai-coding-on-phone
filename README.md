@@ -606,28 +606,58 @@ gh codespace ssh --codespace <other-name>
 gh codespace create --repo YourUsername/new-project
 ```
 
-## Uploading Files from Your Phone
+## Uploading Files from Your Phone to Your Development Environment
 
-Termius has a built-in file manager:
+Getting files from your phone to where your code runs (your Codespace) involves a couple of steps, but it's straightforward once you know how. Think of your Oracle VPS as a temporary holding spot for files coming from your phone before they reach your main development environment in the Codespace.
 
-1. Open Termius → tap your VPS host
-2. Tap the **Files** tab
-3. Tap **Upload**
-4. Select files from your phone
-5. They appear in your VPS home directory
+**Step 1: Get Files from Your Phone to Your Oracle VPS (Using Termius)**
 
-Then move them into your Codespace:
+First, you need to transfer files from your phone to your always-on Oracle VPS.
+
+1.  **Open Termius:** Launch the Termius app on your phone.
+2.  **Connect to your VPS:** Tap on your saved **Oracle VPS** host to establish a connection.
+3.  **Access File Manager:** Look for a **Files** tab or button within Termius and tap it. This is Termius's built-in tool for managing files.
+4.  **Upload from Phone:** Tap **Upload** and then select the file(s) you want to send from your phone's storage.
+5.  **File on VPS:** These files will now appear in your Oracle VPS's home directory (e.g., `/home/ubuntu/`).
+
+**Step 2: Move Files from Your Oracle VPS into Your Codespace**
+
+Once a file is on your Oracle VPS (either uploaded from your phone or created there), you can easily move it into your active Codespace. Think of the `gh codespace cp` command as a special 'copy-paste' tool that works between your VPS and your Codespace. You run this command from your VPS terminal.
+
+*   **Example:** Let's say you uploaded `my_report.pdf` to your VPS's home directory (`~/`), and you want to put it into your project's `documents` folder inside your Codespace (`/workspaces/your-project/documents/`).
+    *   You would run this command in your **VPS terminal**:
+        ```bash
+        gh codespace cp ~/my_report.pdf remote:/workspaces/your-project/documents/
+        ```
+    *   `~/my_report.pdf`: This is the file on your VPS.
+    *   `remote:/workspaces/your-project/documents/`: This is the destination path inside your Codespace.
+
+**Step 3: Organize Files within Your Codespace (Using Gemini CLI)**
+
+Once your files are in the Codespace, you can use Gemini CLI to help manage them.
+
+*   **Example:** If you have a file named `design.jpg` in your Codespace's home directory (`~`) and you want to move it to the `/assets/images/` folder within your project:
+    *   You can tell Gemini:
+        ```
+        move the file design.jpg from my home directory (~/) to /workspaces/your-project/assets/images/
+        ```
+    *   Gemini will then execute the necessary commands within the Codespace to move the file for you.
+
+This layered approach ensures you can efficiently get your files from your phone into your powerful cloud development environment.
+
+## Saving Codespace Hours
+
+The free tier gives you 60 hours per month. Make them count:
 
 ```bash
-gh codespace cp ~/yourfile.pdf remote:/workspaces/your-project/
+# Always stop your codespace when done
+gh codespace stop --codespace <name>
+
+# Start it again when you need it
+gh codespace start --codespace <name>
 ```
 
-Or tell Gemini:
-
-```
-there is a file called design.jpg in my home directory,
-move it into this project under /assets/
-```
+A stopped codespace uses no hours. Your files and everything you installed stays intact.
 
 ## Saving Codespace Hours
 
